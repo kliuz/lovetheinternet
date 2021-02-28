@@ -6,7 +6,7 @@
     <title></title>
   </head>
   <body>
-    <div id="navigation">
+    <div class="navigation">
       <div id="mainTab" class="tab">Main</div>
       <div id="friendsTab" class="tab">Friends</div>
       <div id="notesTab" class="tab">Notes</div>
@@ -33,7 +33,10 @@
       </div>
     </div>
     <div id="notesPage">
-      Notes Page
+      <div class="navigation">
+        <div id="friendsNotesTab" class="secondaryTab">Friends' Notes</div>
+        <div id="publicNotesTab" class="secondaryTab">Public Notes</div>
+      </div>
     </div> 
 
     <sciprt src="js/firebase.js"></sciprt>
@@ -41,5 +44,6 @@
     <script src="js/tabs/navigate.js"></script>
     <script src="js/tabs/main.js"></script>
     <script src="js/tabs/friends.js"></script>
+    <script src="js/tabs/notes.js"></script>
   </body>
 </html>
