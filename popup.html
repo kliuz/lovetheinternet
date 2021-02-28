@@ -12,8 +12,14 @@
       <div id="notesTab" class="tab">Notes</div>
     </div>
     <div id="mainPage">
-      Main Page
-      <button id="addNote">Add a note!</button> 
+      <div id="nux"></div>
+      <div id="mainContent" class="content">
+        <h3>Leave a note on this site:</h3>
+        <div class="buttoGroup">
+          <input type="text" id="addNoteInput" placeholder="Enter your note...">
+          <button id="addNoteButton">Add</button>
+        </div>
+      </div>
     </div>
     <div id="friendsPage">
       Friends Page
@@ -22,6 +28,8 @@
       Notes Page
     </div> 
 
+    <script src="js/button.js"></script>
     <script src="js/tabs/navigate.js"></script>
+    <script src="js/tabs/main.js"></script>
   </body>
 </html>

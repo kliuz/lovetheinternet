@@ -1,6 +1,12 @@
 body {
   width: 400px;
-  height: 400px;
+  min-height: 100px;
+  max-height: 400px;
+}
+
+/* by default, don't show content unless user has a username */
+.content {
+  display: none;
 }
 
 /* format of the navigation bar */
@@ -27,4 +33,19 @@ body {
 .tab:not(.current):hover {
   background-color: #dddddd;
   color: #222222;
+}
+
+/* format of text input */
+input {
+  width: 50%;
+  border: 2px solid #cccccc;
+  border-radius: 4px; 
+  padding: 5px 15px 5px 8px;
+}
+
+/* format of buttons */
+button {
+  cursor: pointer;
+  border: 1px solid black;
+  padding: 5px;
 }
