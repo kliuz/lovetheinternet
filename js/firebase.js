@@ -129,6 +129,55 @@ function getAllNotes(public) {
     });
 }
 
+// eventually returns an array of user's friend notes
+// return data is structured like:
+// {
+//   "username": "friend A"  
+//   "note": note
+// }
+// notes are structured like:
+// {
+//   "note": "example note",
+//   "url": "nytimes.com/2021/02/27/health/covid-vaccine-johnson-and-johnson.html",
+//   "public": false,
+//   "timestamp": {
+//     "seconds": 1614495207,
+//     "nanoseconds": 602000000,
+//   }
+// }
+// TODO: replace with more efficient query
+function getFriendsNotes(username) {
+  let userRef = userCollection.doc(username);
+
+  return userRef
+    .get()
+    .then(async (doc) => {
+      if (doc.exists) {
+        let friends = doc.data().friends;
+        let friendNotes = [];
+        for (let friendName of friends) {
+          let userRef = userCollection.doc(friendName);  
+          let noteRef = userRef.collection("notes");   
+          
+          querySnapshot = await noteRef.get();
+          querySnapshot.forEach((doc) => {
+            friendNotes.push({"username": friendName, "note": doc.data()});
+          });
+        }
+        return friendNotes;
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document during getFriendNotes:", error);
+      return Promise.reject(
+        "Error getting document during getFriendNotes: ",
+        username
+      );
+    });
+}
+
 // eventually returns an array of user notes
 // notes are structured like:
 // {
@@ -186,5 +235,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResp) => {
     getAllNotes(request.fnArgs[0]).then(notes => sendResp(notes));
   } else if (request.fnName === "getUserNotes") {
     getUserNotes(request.fnArgs[0], request.fnArgs[1]).then(notes => sendResp(notes));
+  } else if (request.fnName === "getFriendsNotes") {
+    getFriendsNotes(request.fnArgs[0]).then(notes => sendResp(notes));
   }
 });
