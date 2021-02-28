@@ -1,6 +1,6 @@
 body {
   width: 400px;
-  min-height: 100px;
+  min-height: 160px;
   max-height: 400px;
 }
 
@@ -64,4 +64,26 @@ button {
   cursor: pointer;
   border: 1px solid black;
   padding: 5px;
+}
+
+/* format of the main flexbox */
+#mainFlexbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+}
+
+#privateCheckboxDiv {
+  display: flex;
+  flex-direction: row;
+  width: 70px;
+  align-items: center;
+}
+
+/* format of confirmation textx */
+.confirmation {
+  margin-top: 5px;
+  color: rgb(61, 196, 122);
+  display: none;
 }

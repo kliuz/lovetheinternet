@@ -15,10 +15,17 @@
       <div id="nux"></div>
       <div id="mainContent" class="content">
         <h3>Leave a note on this site:</h3>
-        <div class="buttonGroup">
-          <input type="text" id="addNoteInput" placeholder="Enter your note...">
-          <button id="addNoteButton">Add</button>
+        <div id="mainFlexbox">
+          <div class="buttonGroup">
+            <input type="text" id="addNoteInput" placeholder="Enter your note...">
+            <button id="addNoteButton">Add</button>
+          </div>
+          <div id="privateCheckboxDiv">
+            <label for="privateCheckbox">Private: </label><br>
+            <input type="checkbox" id="privateCheckbox" name="privateCheckbox">
+          </div>
         </div>
+        <div id="addNoteSuccessText" class="confirmation">You saved your note!</div>
       </div>
     </div>
     <div id="friendsPage">

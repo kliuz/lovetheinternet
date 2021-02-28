@@ -68,17 +68,23 @@ function setAddNoteAction() {
       }
 
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-        let url = tabs[0].url;
+        let url = tabs[0].url; // TODO: if this is null, tell user
         let note = addNoteInput.value;
-        let username = "";
+        let username = results["username"];
+        let public = !document.getElementById("privateCheckbox").checked;
 
-        /* This does not work, function not found, not sure why */
-        addNote(username, url, note, true).then(
-          // tell user a note is added
-          () => {}
-        );
+        chrome.runtime.sendMessage({ fnName: "addNote", fnArgs: [username, url, note, public] }, (resp) => {
+          if (resp) {
+            addNoteInput.value = ""
 
-        addNoteInput.value = "";
+            // show success text for 3 seconds
+            let confirmationText = document.getElementById("addNoteSuccessText");
+            confirmationText.style.display = "block";
+            setTimeout(() => confirmationText.style.display = "none", 3000);
+          } else {
+            // TODO: add failure text
+          }
+        });
       });
     });
   };
