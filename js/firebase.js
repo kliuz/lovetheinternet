@@ -1,10 +1,23 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-console.log(firebase);
+const db = firebase.firestore();
 
 function addUser(username) {
-  // return true if successful, false otherwise
+  let collection = db.collection("users");
+  let userRef = db.collection("users").doc(username);
+
+  userRef
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        collection.doc(username).set({ friends: [], notes: [] });
+        success = true;
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document during addUser:", error);
+    });
 }
 
 function addFriend(username, friendUsername) {
@@ -27,6 +40,8 @@ function getPublicNotes() {
   // return all public notes
 }
 
-function getUserNOtes(username, public) {
+function getUserNotes(username, public) {
   // return notes for this user
 }
+
+console.log(addUser('sharon washio'));
