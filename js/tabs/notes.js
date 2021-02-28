@@ -7,6 +7,10 @@ const NotesTabEnum = Object.freeze({
   public: 2,
 });
 
+// for caching
+let friendsNotes = null;
+let publicNotes = null;
+
 // @params (NotesTabsEnum) tab: update UI for selected currentTab
 function makeCurrentNotesTab(tab) {
   const currentClassName = "current";
@@ -14,10 +18,12 @@ function makeCurrentNotesTab(tab) {
     case TabEnum.friends:
       friendsNotesTab.classList.add(currentClassName);
       publicNotesTab.classList.remove(currentClassName);
+      getFriendsNotes();
       return;
     case TabEnum.public:
       friendsNotesTab.classList.remove(currentClassName);
       publicNotesTab.classList.add(currentClassName);
+      getPublicNotes();
       return;
     default:
       return;
@@ -25,6 +31,11 @@ function makeCurrentNotesTab(tab) {
 }
 
 function getFriendsNotes() {
+  if (friendsNotes != null) {
+    clearAndAddNotesInSection(friendsNotes);
+    return;      
+  }
+
   chrome.storage.sync.get(null, (results) => {
     const username = results["username"];
     if (username == null) {
@@ -32,11 +43,36 @@ function getFriendsNotes() {
     }
 
     chrome.runtime.sendMessage({ fnName: "getFriendsNotes", fnArgs: [username] }, (resp) => {
-      for (note of resp) {
-        addNoteToSection(note["username"], note["note"]["note"], note["note"]["url"])
-      }
+      friendsNotes = resp;
+      clearAndAddNotesInSection(resp);
     });
   });
+}
+
+function getPublicNotes() {
+  if (publicNotes != null) {
+    clearAndAddNotesInSection(publicNotes);
+    return;      
+  }
+
+  chrome.storage.sync.get(null, (results) => {
+    const username = results["username"];
+    if (username == null) {
+      return;
+    }
+
+    chrome.runtime.sendMessage({ fnName: "getAllNotes", fnArgs: [true /*public*/] }, (resp) => {
+      publicNotes = resp;
+      clearAndAddNotesInSection(resp);
+    });
+  });
+}
+
+function clearAndAddNotesInSection(notes) {
+  document.getElementById("notesSection").innerHTML = "";
+  for (note of notes) {
+    addNoteToSection(note["username"], note["note"]["note"], note["note"]["url"])
+  }
 }
 
 // TODO: add timestamp
@@ -53,4 +89,3 @@ friendsNotesTab.onclick = () => makeCurrentNotesTab(TabEnum.friends);
 publicNotesTab.onclick = () => makeCurrentNotesTab(TabEnum.public);
 
 makeCurrentNotesTab(TabEnum.friends);
-getFriendsNotes();
