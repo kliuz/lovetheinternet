@@ -5,6 +5,8 @@
   position: fixed;
   left: 20px;
   top: 20px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
   padding: 12px;
   border-left: 4px solid rgb(213, 79, 79);
   border-radius: 4px 18px 18px 4px; /* also update border radius for close button */
