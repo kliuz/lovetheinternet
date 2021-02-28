@@ -102,12 +102,40 @@ function getUserFriends(username) {
     });
 }
 
+// eventually returns an array of public note objects
+// public note objects are structured like:
+// {
+//   "username": "obama",
+//   "note": note
+// }
+// note has the same structure as the notes returned by getUserNotes
 function getPublicNotes() {
-  // return all public notes
+  return userCollection
+    .get()
+    .then((querySnapshot) => {
+      let publicNotes = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        getUserNotes(doc.id, true)
+          .then((notes) =>
+            notes.forEach((note) =>
+              publicNotes.push({ username: doc.id, note: note })
+            )
+          )
+          .catch((error) =>
+            console.error("Couldn't get public notes for: ", doc.id)
+          );
+      });
+      return publicNotes;
+    })
+    .catch((error) => {
+      console.log("Error getting documents during getPublicNotes: ", error);
+      return Promise.reject("Error getting document during getPublicNotes");
+    });
 }
 
 // eventually returns an array of user notes
-// notes are structured like
+// notes are structured like:
 // {
 //   "note": "example note",
 //   "url": "nytimes.com/2021/02/27/health/covid-vaccine-johnson-and-johnson.html",
@@ -128,7 +156,6 @@ function getUserNotes(username, public) {
       let notes = [];
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data().timestamp);
         notes.push(doc.data());
       });
       return notes;
@@ -143,19 +170,21 @@ function getUserNotes(username, public) {
 }
 
 // addUser("sharon").then((success) => console.log(success));
+
 // addNote(
-//   "sharon",
-//   "ow.com",
-//   "this website is great",
+//   "kliu",
+//   "wsj.com/1923834712",
+//   "stonks",
 //   true
 // ).then((success) => console.log(success));
-// addFriend("sharon", "kevin").then((s) => console.log(s));
-// getUserFriends("sharon").then((doc) => console.log(doc));
 
-getUserNotes("chiyu", false).then((docs) => {
-  docs.forEach((d) => {
-    if (d.timestamp) {
-      console.log(d.timestamp.nanoseconds);
-    }
-  });
-});
+// addFriend("kliu", "chi").then((s) => console.log(s));
+// addFriend("kliu", "sharo").then((s) => console.log(s));
+
+// getUserFriends("kliu").then((doc) => console.log(doc));
+
+// getUserNotes("kliu", true).then((docs) => {
+//   console.log(docs);
+// });
+
+// getPublicNotes().then((s) => console.log(s));
