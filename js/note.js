@@ -1,6 +1,18 @@
+function createNotesSection() {
+  let notesSectionDiv = document.createElement("div");
+  notesSectionDiv.id = "memoments-notes-section";
+  
+  if (document.body.firstElementChild != null) {
+    document.body.insertBefore(notesSectionDiv, document.body.firstElementChild);
+  }
+
+  return notesSectionDiv;
+}
+
+// @param (string) user: user who made the note
 // @param (string) content: content of the note
 // @param (string) id: id of the note html element
-function getNewNote(content, id) {
+function getNewNote(user, content, id) {
   // don't create elements with duplicate ids
   if (document.getElementById(id) != null) {
     console.log("DUPLICATE IDs");
@@ -10,22 +22,15 @@ function getNewNote(content, id) {
   let noteDiv = document.createElement("div");
   noteDiv.classList.add("memoments-note");
   noteDiv.id = id;
-  let noteContent = document.createTextNode(content);
-  noteDiv.appendChild(noteContent);
+  noteDiv.innerHTML = "<b>" + user + ":</b> " + content
   
-  if (document.body.firstElementChild != null) {
-    document.body.insertBefore(noteDiv, document.body.firstElementChild);
+  let notesSectionDiv = document.getElementById("memoments-notes-section")
+
+  if (notesSectionDiv == null) {
+    notesSectionDiv = createNotesSection()
   }
 
-  appendCloseButton(id);
-}
-
-// @param (string) id: id of the html element to close
-function appendCloseButton(id) {
-  targetElement = document.getElementById(id);
-  if (targetElement == null) {
-    return;
-  }
+  notesSectionDiv.appendChild(noteDiv);
 
   let buttonDiv = document.createElement("span");
   buttonDiv.classList.add("memoments-close-button");
@@ -33,10 +38,17 @@ function appendCloseButton(id) {
   buttonDiv.appendChild(buttonContent);
 
   buttonDiv.onclick = () => {
-    targetElement.style.display = "none";
+    noteDiv.style.display = "none";
   }
 
-  targetElement.appendChild(buttonDiv);
+  noteDiv.appendChild(buttonDiv);
 }
 
-getNewNote("Placeholder Note!", "test");
+chrome.runtime.sendMessage({command: "getNotes", url: location.href}, response => {
+  console.log("response", response)
+  for (index in response) {
+    let username = response[index]["username"];
+    let note = response[index]["note"]["note"];
+    getNewNote(username, note, username + "-" + index);
+  }
+});

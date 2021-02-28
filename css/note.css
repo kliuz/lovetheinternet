@@ -1,10 +1,8 @@
 .memoments-note {
-  width: 500px;
+  width: 400px;
   background-color: rgb(221, 160, 221); /* fallback color */
   background-color: rgba(221, 160, 221, 0.9);
-  position: fixed;
-  left: 20px;
-  top: 20px;
+  margin: 4px;
   font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
   padding: 12px;
@@ -13,20 +11,51 @@
   z-index: 100000; /* to ensure the note is on top */
 }
 
+/* Fix style :( */
 .memoments-close-button {
   cursor: pointer;
-  position: absolute;
   top: 50%;
   right: 0%;
-  padding: 12px 18px;
+  margin: 4px;
+  padding: 8px 8px;
   transform: translate(0%, -50%);
   font-size: 14px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: black;
-  border-radius: 0 18px 18px 0; /* also update border radius for note */
+  border-radius: 50%; /* also update border radius for note */
 }
 
 .memoments-close-button:hover {
   background-color: rgb(226, 190, 226);
   background-color: rgba(226, 190, 226, 0.85);
+}
+
+/* notes section style */
+#memoments-notes-section {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  z-index: 100000; /* to ensure the note is on top */
+  background-color: rgb(240,240,240);
+  background-color: rgba(240,240,240,0.85);
+  width: 500px;
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#memoments-notes-section::-webkit-scrollbar {
+  width: 8px;
+}
+#memoments-notes-section::-webkit-scrollbar-track {
+  background: #aaa;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+#memoments-notes-section::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.5);
+  border-radius: 4px;
+}
+#memoments-notes-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,.7);
 }
