@@ -23,7 +23,7 @@ chrome.runtime.sendMessage({ command: "getNotes" }, (response) => {
       labels: keys,
       datasets: [
         {
-          label: "Population (millions)",
+          label: "Number of notes",
           backgroundColor: [
             "#3e95cd",
             "#8e5ea2",
