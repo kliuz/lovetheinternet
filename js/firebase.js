@@ -109,13 +109,13 @@ function getUserFriends(username) {
 //   "note": note
 // }
 // note has the same structure as the notes returned by getUserNotes
-function getPublicNotes() {
+function getAllNotes(public) {
   return userCollection
     .get()
     .then(async (querySnapshot) => {
       let publicNotes = [];
       for (doc of querySnapshot.docs) {
-        let notes = await getUserNotes(doc.id, true);
+        let notes = await getUserNotes(doc.id, public);
         notes.forEach((note) => {
           publicNotes.push({ username: doc.id, note: note });
         });
