@@ -102,6 +102,13 @@ function getUserFriends(username) {
     });
 }
 
+// eventually returns an array of public note objects
+// public note objects are structured like:
+// {
+//   "username": "obama",
+//   "note": note
+// }
+// note has the same structure as the notes returned by getUserNotes
 function getPublicNotes() {
   return userCollection
     .get()
@@ -163,18 +170,21 @@ function getUserNotes(username, public) {
 }
 
 // addUser("sharon").then((success) => console.log(success));
-addNote(
-  "kliu",
-  "wsj.com/1923834712",
-  "stonks",
-  true
-).then((success) => console.log(success));
+
+// addNote(
+//   "kliu",
+//   "wsj.com/1923834712",
+//   "stonks",
+//   true
+// ).then((success) => console.log(success));
+
 // addFriend("kliu", "chi").then((s) => console.log(s));
 // addFriend("kliu", "sharo").then((s) => console.log(s));
+
 // getUserFriends("kliu").then((doc) => console.log(doc));
 
 // getUserNotes("kliu", true).then((docs) => {
 //   console.log(docs);
 // });
 
-getPublicNotes().then((s) => console.log(s));
+// getPublicNotes().then((s) => console.log(s));
