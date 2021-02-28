@@ -7,36 +7,76 @@ const userCollection = db.collection("users");
 function addUser(username) {
   let userRef = userCollection.doc(username);
 
-  userRef
+  return userRef
     .get()
     .then((doc) => {
       if (!doc.exists) {
-        userCollection.doc(username).set({ friends: [], notes: [] });
+        userCollection.doc(username).set({ friends: [] });
+        return true;
+      } else {
+        return false;
       }
     })
     .catch((error) => {
       console.error("Error getting document during addUser:", error);
+      return Promise.reject(
+        "Error getting document during addUser: ",
+        username
+      );
     });
 }
 
 function addFriend(username, friendUsername) {
   let userRef = userCollection.doc(username);
-  userRef
+
+  return userRef
     .get()
     .then((doc) => {
       if (doc.exists) {
-        userRef.update({ friends: firebase.firestore.FieldValue.arrayUnion(friendUsername) });
+        userRef.update({
+          friends: firebase.firestore.FieldValue.arrayUnion(friendUsername),
+        });
+        return true;
       } else {
-        console.error("Username does not exist on addFriend: ", username);
+        return false;
       }
     })
     .catch((error) => {
       console.error("Error getting document during addFriend:", error);
+      return Promise.reject(
+        "Error getting document during addFriend: ",
+        username
+      );
     });
 }
 
 function addNote(username, url, note, public) {
-  // return true if successful, false otherwise
+  let userRef = userCollection.doc(username);
+
+  return userRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userRef
+          .collection("notes")
+          .add({
+            url: url,
+            note: note,
+            public: public,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document during addNote:", error);
+      return Promise.reject(
+        "Error getting document during addNote: ",
+        username
+      );
+    });
 }
 
 function getUser(username) {
@@ -55,5 +95,11 @@ function getUserNotes(username, public) {
   // return notes for this user
 }
 
-addFriend("sharon washio", "chiyu");
-addFriend("sharon washio", "kliu");
+// addUser("sharon").then((success) => console.log(success));
+// addNote(
+//   "sharon",
+//   "ow.com",
+//   "this website is great",
+//   true
+// ).then((success) => console.log(success));
+addFriend("sharon", "kevin").then((s) => console.log(s));
