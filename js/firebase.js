@@ -4,6 +4,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const userCollection = db.collection("users");
 
+// eventually returns true if username was added, false otherwise
 function addUser(username) {
   let userRef = userCollection.doc(username);
 
@@ -26,6 +27,7 @@ function addUser(username) {
     });
 }
 
+// eventually returns true if friend was added, false otherwise
 function addFriend(username, friendUsername) {
   let userRef = userCollection.doc(username);
 
@@ -50,6 +52,7 @@ function addFriend(username, friendUsername) {
     });
 }
 
+// eventually returns true if note was added, false otherwise
 function addNote(username, url, note, public) {
   let userRef = userCollection.doc(username);
 
@@ -77,8 +80,8 @@ function addNote(username, url, note, public) {
     });
 }
 
+// eventually returns array of usernames
 function getUserFriends(username) {
-  // return array of usernames
   let userRef = userCollection.doc(username);
 
   return userRef
@@ -103,8 +106,40 @@ function getPublicNotes() {
   // return all public notes
 }
 
+// eventually returns an array of user notes
+// notes are structured like
+// {
+//   "note": "example note",
+//   "url": "nytimes.com/2021/02/27/health/covid-vaccine-johnson-and-johnson.html",
+//   "public": false,
+//   "timestamp": {
+//     "seconds": 1614495207,
+//     "nanoseconds": 602000000,
+//   }
+// }
 function getUserNotes(username, public) {
-  // return notes for this user
+  let userRef = userCollection.doc(username);
+  let noteRef = userRef.collection("notes");
+
+  return noteRef
+    .where("public", "==", public)
+    .get()
+    .then((querySnapshot) => {
+      let notes = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data().timestamp);
+        notes.push(doc.data());
+      });
+      return notes;
+    })
+    .catch((error) => {
+      console.log("Error getting documents during getUserNotes: ", error);
+      return Promise.reject(
+        "Error getting document during getUserNotes: ",
+        username
+      );
+    });
 }
 
 // addUser("sharon").then((success) => console.log(success));
@@ -115,4 +150,12 @@ function getUserNotes(username, public) {
 //   true
 // ).then((success) => console.log(success));
 // addFriend("sharon", "kevin").then((s) => console.log(s));
-getUserFriends("sharon").then((doc) => console.log(doc));
+// getUserFriends("sharon").then((doc) => console.log(doc));
+
+getUserNotes("chiyu", false).then((docs) => {
+  docs.forEach((d) => {
+    if (d.timestamp) {
+      console.log(d.timestamp.nanoseconds);
+    }
+  });
+});
