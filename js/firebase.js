@@ -57,14 +57,12 @@ function addNote(username, url, note, public) {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        userRef
-          .collection("notes")
-          .add({
-            url: url,
-            note: note,
-            public: public,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+        userRef.collection("notes").add({
+          url: url,
+          note: note,
+          public: public,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
         return true;
       } else {
         return false;
@@ -79,12 +77,26 @@ function addNote(username, url, note, public) {
     });
 }
 
-function getUser(username) {
-  // return document for this user
-}
-
-function getAllUserFriends(username) {
+function getUserFriends(username) {
   // return array of usernames
+  let userRef = userCollection.doc(username);
+
+  return userRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        return doc.data().friends;
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document during getAllUserFriends:", error);
+      return Promise.reject(
+        "Error getting document during getAllUserFriends: ",
+        username
+      );
+    });
 }
 
 function getPublicNotes() {
@@ -102,4 +114,5 @@ function getUserNotes(username, public) {
 //   "this website is great",
 //   true
 // ).then((success) => console.log(success));
-addFriend("sharon", "kevin").then((s) => console.log(s));
+// addFriend("sharon", "kevin").then((s) => console.log(s));
+getUserFriends("sharon").then((doc) => console.log(doc));
