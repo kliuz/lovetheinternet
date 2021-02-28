@@ -2,17 +2,16 @@
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
+const userCollection = db.collection("users");
 
 function addUser(username) {
-  let collection = db.collection("users");
-  let userRef = db.collection("users").doc(username);
+  let userRef = userCollection.doc(username);
 
   userRef
     .get()
     .then((doc) => {
       if (!doc.exists) {
-        collection.doc(username).set({ friends: [], notes: [] });
-        success = true;
+        userCollection.doc(username).set({ friends: [], notes: [] });
       }
     })
     .catch((error) => {
@@ -21,7 +20,19 @@ function addUser(username) {
 }
 
 function addFriend(username, friendUsername) {
-  // return true if successful, false otherwise
+  let userRef = userCollection.doc(username);
+  userRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userRef.update({ friends: firebase.firestore.FieldValue.arrayUnion(friendUsername) });
+      } else {
+        console.error("Username does not exist on addFriend: ", username);
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document during addFriend:", error);
+    });
 }
 
 function addNote(username, url, note, public) {
@@ -44,4 +55,5 @@ function getUserNotes(username, public) {
   // return notes for this user
 }
 
-console.log(addUser('sharon washio'));
+addFriend("sharon washio", "chiyu");
+addFriend("sharon washio", "kliu");
