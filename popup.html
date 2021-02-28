@@ -15,14 +15,22 @@
       <div id="nux"></div>
       <div id="mainContent" class="content">
         <h3>Leave a note on this site:</h3>
-        <div class="buttoGroup">
+        <div class="buttonGroup">
           <input type="text" id="addNoteInput" placeholder="Enter your note...">
           <button id="addNoteButton">Add</button>
         </div>
       </div>
     </div>
     <div id="friendsPage">
-      Friends Page
+      <div id="friendsContent" class="content">
+        <h3>Add a new friend: </h3>
+        <div class="buttonGroup">
+          <input type="text" id="addFriendInput" placeholder="Enter their username">
+          <button id="addFriendButton">Add</button>
+        </div>
+        <h3>Your friend list: </h3>
+        <div id="friendList"></div>
+      </div>
     </div>
     <div id="notesPage">
       Notes Page
@@ -32,5 +40,6 @@
     <script src="js/button.js"></script>
     <script src="js/tabs/navigate.js"></script>
     <script src="js/tabs/main.js"></script>
+    <script src="js/tabs/friends.js"></script>
   </body>
 </html>
