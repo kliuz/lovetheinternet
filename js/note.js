@@ -46,10 +46,10 @@ function getNewNote(user, content, id) {
 
 chrome.runtime.sendMessage({command: "getNotes"}, response => {
   console.log("response", response)
-  response.filter(note => note["note"]["url"] === location.href)
-  for (index in response) {
-    let username = response[index]["username"];
-    let note = response[index]["note"]["note"];
+  let matches = response.filter(note => note["note"]["url"] === location.href)
+  for (index in matches) {
+    let username = matches[index]["username"];
+    let note = matches[index]["note"]["note"];
     getNewNote(username, note, username + "-" + index);
   }
 });
