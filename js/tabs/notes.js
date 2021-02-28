@@ -1,6 +1,7 @@
 // get elements
 let friendsNotesTab = document.getElementById("friendsNotesTab");
 let publicNotesTab = document.getElementById("publicNotesTab");
+let visualizationTab = document.getElementById("visualizationTab");
 
 const NotesTabEnum = Object.freeze({
   friends: 1,
@@ -87,5 +88,6 @@ function addNoteToSection(username, note, url) {
 
 friendsNotesTab.onclick = () => makeCurrentNotesTab(TabEnum.friends);
 publicNotesTab.onclick = () => makeCurrentNotesTab(TabEnum.public);
+visualizationTab.onclick = () => chrome.tabs.create({active: true, url: "visualization.html"});
 
 makeCurrentNotesTab(TabEnum.friends);
