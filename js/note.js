@@ -44,8 +44,9 @@ function getNewNote(user, content, id) {
   noteDiv.appendChild(buttonDiv);
 }
 
-chrome.runtime.sendMessage({command: "getNotes", url: location.href}, response => {
+chrome.runtime.sendMessage({fnName: "getAllNotes", fnArgs: [true /*public*/]}, response => {
   console.log("response", response)
+  response.filter(note => note["note"]["url"] === href.location)
   for (index in response) {
     let username = response[index]["username"];
     let note = response[index]["note"]["note"];

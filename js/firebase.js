@@ -120,6 +120,7 @@ function getAllNotes(public) {
           publicNotes.push({ username: doc.id, note: note });
         });
       }
+      console.log(publicNotes)
       return publicNotes;
     })
     .catch((error) => {
@@ -181,8 +182,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResp) => {
     ).then((success) => sendResp(success));
   } else if (request.fnName === "getUserFriends") {
     getUserFriends(request.rnArgs[0]).then(friends => sendResp(friends));
-  } else if (request.fnName === "getPublicNotes") {
-    getPublicNotes().then(notes => sendResp(notes));
+  } else if (request.fnName === "getAllNotes") {
+    getAllNotes(request.fnArgs[0]).then(notes => sendResp(notes));
   } else if (request.fnName === "getUserNotes") {
     getUserNotes(request.fnArgs[0], request.fnArgs[1]).then(notes => sendResp(notes));
   }
