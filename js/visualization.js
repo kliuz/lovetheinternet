@@ -15,7 +15,7 @@ chrome.runtime.sendMessage({ command: "getNotes" }, (response) => {
   }
 
   let keys = Array.from(websiteMap.keys());
-  let values = Array.from(websiteMap.values());
+  let values = Array.from(websiteMap.values()).sort().reverse();
 
   new Chart(document.getElementById("bar-chart-horizontal"), {
     type: "horizontalBar",
@@ -26,6 +26,17 @@ chrome.runtime.sendMessage({ command: "getNotes" }, (response) => {
           label: "Population (millions)",
           backgroundColor: [
             "#3e95cd",
+            "#8e5ea2",
+            "#3cba9f",
+            "#e8c3b9",
+            "#c45850",
+            "#8B4513",
+            "#BA55D3",
+            "#ADD8E6",
+            "#E0FFFF",
+            "#FFDEAD",
+            "#FF1493",
+            "#808000",
             "#8e5ea2",
             "#3cba9f",
             "#e8c3b9",
@@ -48,6 +59,16 @@ chrome.runtime.sendMessage({ command: "getNotes" }, (response) => {
         display: true,
         text: "Notes left on site",
       },
+      scales: {
+        xAxes: [{
+          ticks: {
+            // beginAtZero: true,
+            min: 0,
+            max: 10,
+            stepSize: 1,
+          }
+        }]
+      }
     },
   });
 });
