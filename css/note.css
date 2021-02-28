@@ -1,0 +1,30 @@
+.friendnote-note {
+  width: 500px;
+  background-color: rgb(221, 160, 221); /* fallback color */
+  background-color: rgba(221, 160, 221, 0.9);
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  padding: 12px;
+  border-left: 4px solid rgb(213, 79, 79);
+  border-radius: 4px 18px 18px 4px; /* also update border radius for close button */
+  z-index: 100000; /* to ensure the note is on top */
+}
+
+.friendnote-close-button {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  padding: 12px 18px;
+  transform: translate(0%, -50%);
+  font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
+  border-radius: 0 18px 18px 0; /* also update border radius for note */
+}
+
+.friendnote-close-button:hover {
+  background-color: rgb(226, 190, 226);
+  background-color: rgba(226, 190, 226, 0.85);
+}
