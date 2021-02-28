@@ -1,4 +1,4 @@
-.friendnote-note {
+.memoments-note {
   width: 500px;
   background-color: rgb(221, 160, 221); /* fallback color */
   background-color: rgba(221, 160, 221, 0.9);
@@ -13,7 +13,7 @@
   z-index: 100000; /* to ensure the note is on top */
 }
 
-.friendnote-close-button {
+.memoments-close-button {
   cursor: pointer;
   position: absolute;
   top: 50%;
@@ -26,7 +26,7 @@
   border-radius: 0 18px 18px 0; /* also update border radius for note */
 }
 
-.friendnote-close-button:hover {
+.memoments-close-button:hover {
   background-color: rgb(226, 190, 226);
   background-color: rgba(226, 190, 226, 0.85);
 }

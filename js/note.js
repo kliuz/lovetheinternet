@@ -8,7 +8,7 @@ function getNewNote(content, id) {
   }
 
   let noteDiv = document.createElement("div");
-  noteDiv.classList.add("friendnote-note");
+  noteDiv.classList.add("memoments-note");
   noteDiv.id = id;
   let noteContent = document.createTextNode(content);
   noteDiv.appendChild(noteContent);
@@ -28,7 +28,7 @@ function appendCloseButton(id) {
   }
 
   let buttonDiv = document.createElement("span");
-  buttonDiv.classList.add("friendnote-close-button");
+  buttonDiv.classList.add("memoments-close-button");
   let buttonContent = document.createTextNode("x")
   buttonDiv.appendChild(buttonContent);
 
