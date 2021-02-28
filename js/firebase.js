@@ -117,7 +117,7 @@ function getPublicNotes() {
       for (doc of querySnapshot.docs) {
         let notes = await getUserNotes(doc.id, true);
         notes.forEach((note) => {
-          publicNotes.push({ username: doc.id, note: note })
+          publicNotes.push({ username: doc.id, note: note });
         });
       }
       return publicNotes;
@@ -163,22 +163,27 @@ function getUserNotes(username, public) {
     });
 }
 
-// addUser("sharon").then((success) => console.log(success));
-
-// addNote(
-//   "kliu",
-//   "wsj.com/1923834712",
-//   "stonks",
-//   true
-// ).then((success) => console.log(success));
-
-// addFriend("kliu", "chi").then((s) => console.log(s));
-// addFriend("kliu", "sharo").then((s) => console.log(s));
-
-// getUserFriends("kliu").then((doc) => console.log(doc));
-
-// getUserNotes("kliu", true).then((docs) => {
-//   console.log(docs);
-// });
-
-// getPublicNotes().then((s) => console.log(s));
+// @param (object) request: the request passed in should be an object containing a string
+// fnName (function name) and an array fnArgs (exact number of arguments for function)
+chrome.runtime.onMessage.addListener((request, sender, sendResp) => {
+  if (request.fnName === "addUser") {
+    addUser(request.fnArgs[0]).then((success) => sendResp(success));
+  } else if (request.fnName === "addFriend") {
+    addFriend(request.fnArgs[0], request.fnArgs[1]).then((success) =>
+      sendResp(success)
+    );
+  } else if (request.fnName === "addNote") {
+    addNote(
+      request.fnArgs[0],
+      request.fnArgs[1],
+      request.fnArgs[2],
+      request.fnArgs[3]
+    ).then((success) => sendResp(success));
+  } else if (request.fnName === "getUserFriends") {
+    getUserFriends(request.rnArgs[0]).then(friends => sendResp(friends));
+  } else if (request.fnName === "getPublicNotes") {
+    getPublicNotes().then(notes => sendResp(notes));
+  } else if (request.fnName === "getUserNotes") {
+    getUserNotes(request.fnArgs[0], request.fnArgs[1]).then(notes => sendResp(notes));
+  }
+});

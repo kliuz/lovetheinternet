@@ -3,21 +3,21 @@ function getMainContent() {
   let nux = document.getElementById("nux");
   nux.innerHTML = "";
 
-  chrome.storage.sync.get(null, results => {
-    let username = results["username"]
+  chrome.storage.sync.get(null, (results) => {
+    let username = results["username"];
     if (username == null) {
       getContentForNewUser();
     } else {
       let mainContent = document.getElementById("mainContent");
 
       let welcomeDiv = document.createElement("h2");
-      welcomeDiv.innerHTML = "Hello, <span>" + username + "</span>!"
+      welcomeDiv.innerHTML = "Hello, <span>" + username + "</span>!";
 
       mainContent.insertBefore(welcomeDiv, mainContent.firstElementChild);
 
       showContent();
     }
-  })
+  });
 }
 
 function showContent() {
@@ -42,16 +42,19 @@ function getContentForNewUser() {
   save.onclick = () => {
     saveUserName(input.value);
     input.value = "";
-  }
-  
+  };
+
   buttonGroupDiv.appendChild(input);
   buttonGroupDiv.appendChild(save);
-  nux.appendChild(buttonGroupDiv)
+  nux.appendChild(buttonGroupDiv);
 }
 
 // @param (string) username: username entered by the user
 function saveUserName(username) {
-  chrome.storage.sync.set({username: username}, getMainContent);
+  chrome.runtime.sendMessage({ fnName: "addUser", fnArgs: [username] }, (resp) => {
+    console.log(resp);
+  });
+  chrome.storage.sync.set({ username: username }, getMainContent);
 }
 
 function setAddNoteAction() {
@@ -59,26 +62,26 @@ function setAddNoteAction() {
   let addNoteButton = document.getElementById("addNoteButton");
 
   addNoteButton.onclick = () => {
-    chrome.storage.sync.get(null, results => {
+    chrome.storage.sync.get(null, (results) => {
       if (results["username"] == null) {
         return;
-      } 
-      
-      chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-        let url = tabs[0].url;  
+      }
+
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+        let url = tabs[0].url;
         let note = addNoteInput.value;
         let username = "";
-        
+
         /* This does not work, function not found, not sure why */
         addNote(username, url, note, true).then(
           // tell user a note is added
           () => {}
-        )
+        );
 
         addNoteInput.value = "";
-      })
+      });
     });
-  }
+  };
 }
 
 setAddNoteAction();
