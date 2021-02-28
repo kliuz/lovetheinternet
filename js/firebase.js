@@ -112,20 +112,14 @@ function getUserFriends(username) {
 function getPublicNotes() {
   return userCollection
     .get()
-    .then((querySnapshot) => {
+    .then(async (querySnapshot) => {
       let publicNotes = [];
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        getUserNotes(doc.id, true)
-          .then((notes) =>
-            notes.forEach((note) =>
-              publicNotes.push({ username: doc.id, note: note })
-            )
-          )
-          .catch((error) =>
-            console.error("Couldn't get public notes for: ", doc.id)
-          );
-      });
+      for (doc of querySnapshot.docs) {
+        let notes = await getUserNotes(doc.id, true);
+        notes.forEach((note) => {
+          publicNotes.push({ username: doc.id, note: note })
+        });
+      }
       return publicNotes;
     })
     .catch((error) => {
