@@ -4,9 +4,17 @@ function getMainContent() {
   nux.innerHTML = "";
 
   chrome.storage.sync.get(null, results => {
-    if (results["username"] == null) {
+    let username = results["username"]
+    if (username == null) {
       getContentForNewUser();
     } else {
+      let mainContent = document.getElementById("mainContent");
+
+      let welcomeDiv = document.createElement("h2");
+      welcomeDiv.innerHTML = "Hello, <span>" + username + "</span>!"
+
+      mainContent.insertBefore(welcomeDiv, mainContent.firstElementChild);
+
       showContent();
     }
   })
@@ -46,4 +54,32 @@ function saveUserName(username) {
   chrome.storage.sync.set({username: username}, getMainContent);
 }
 
+function setAddNoteAction() {
+  let addNoteInput = document.getElementById("addNoteInput");
+  let addNoteButton = document.getElementById("addNoteButton");
+
+  addNoteButton.onclick = () => {
+    chrome.storage.sync.get(null, results => {
+      if (results["username"] == null) {
+        return;
+      } 
+      
+      chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        let url = tabs[0].url;  
+        let note = addNoteInput.value;
+        let username = "";
+        
+        /* This does not work, function not found, not sure why */
+        addNote(username, url, note, true).then(
+          // tell user a note is added
+          () => {}
+        )
+
+        addNoteInput.value = "";
+      })
+    });
+  }
+}
+
+setAddNoteAction();
 getMainContent();
