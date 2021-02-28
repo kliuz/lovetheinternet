@@ -181,7 +181,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResp) => {
       request.fnArgs[3]
     ).then((success) => sendResp(success));
   } else if (request.fnName === "getUserFriends") {
-    getUserFriends(request.rnArgs[0]).then(friends => sendResp(friends));
+    getUserFriends(request.fnArgs[0]).then(friends => sendResp(friends));
   } else if (request.fnName === "getAllNotes") {
     getAllNotes(request.fnArgs[0]).then(notes => sendResp(notes));
   } else if (request.fnName === "getUserNotes") {

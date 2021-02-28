@@ -81,6 +81,12 @@ button {
   align-items: center;
 }
 
+/* format of the friend page */
+#friendList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 /* format of confirmation textx */
 .confirmation {
   margin-top: 5px;
